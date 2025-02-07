@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Category - Goal Tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>{{ category_name }}</h1>
+    <div id="calendar"></div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const calendar = document.getElementById("calendar");
+            const today = new Date();
+            const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                let dayElement = document.createElement("div");
+                dayElement.classList.add("day");
+                dayElement.innerText = day;
+                dayElement.onclick = function () {
+                    this.classList.toggle("completed");
+                    updateTaskStatus({{ category_id }}, day);
+                };
+                calendar.appendChild(dayElement);
+            }
+        });
+
+        function updateTaskStatus(categoryId, day) {
+            fetch(`/update_task`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ category_id: categoryId, day: day })
+            });
+        }
+        document.addEventListener("DOMContentLoaded", function () {
+            const calendar = document.getElementById("calendar");
+            const today = new Date();
+            const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+    
+            for (let day = 1; day <= daysInMonth; day++) {
+                let dayElement = document.createElement("div");
+                dayElement.classList.add("day");
+                dayElement.innerText = day;
+                
+                // Check if the day was already completed
+                fetch(`/get_task_status?category_id={{ category_id }}&day=${day}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.completed) {
+                            dayElement.classList.add("completed");
+                        }
+                    });
+    
+                dayElement.onclick = function () {
+                    this.classList.toggle("completed");
+                    updateTaskStatus({{ category_id }}, day, this.classList.contains("completed"));
+                };
+    
+                calendar.appendChild(dayElement);
+            }
+        });
+    
+        function updateTaskStatus(categoryId, day, completed) {
+            fetch("/update_task", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ category_id: categoryId, day: day, completed: completed })
+            });
+        }
+    </script>
+</body>
+</html>

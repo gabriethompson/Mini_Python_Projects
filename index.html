@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Goal Tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Daily Goal Tracker</h1>
+    <label for="category">Choose a category:</label>
+    <select id="category-dropdown" onchange="navigateToCategory()">
+        <option value="">Select a Category</option>
+        <option value="skills">Skills Dev</option>
+        <option value="psyche">Psyche</option>
+        <option value="health">Health</option>
+    </select>
+
+    <script>
+        function navigateToCategory() {
+            let category = document.getElementById("category-dropdown").value;
+            if (category) {
+                window.location.href = "/category/" + category;
+            }
+        }
+    </script>
+</body>
+</html>

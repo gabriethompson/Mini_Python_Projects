@@ -1,0 +1,30 @@
+body {
+    font-family: 'Palatino', serif;
+    background-color: #FF5CCD;
+    color: white;
+    text-align: center;
+}
+
+#calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+    padding: 20px;
+}
+
+.day {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    color: black;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.completed {
+    background: green;
+    color: white;
+}
